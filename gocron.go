@@ -380,7 +380,8 @@ func (s *Scheduler) Swap(i, j int) {
 }
 
 func (s *Scheduler) Less(i, j int) bool {
-	return s.jobs[j].nextRun.Second() >= s.jobs[i].nextRun.Second()
+	//fmt.Println(s.jobs[j].nextRun, s.jobs[j].nextRun.Second(), s.jobs[i].nextRun, s.jobs[i].nextRun.Second())
+	return s.jobs[j].nextRun.After(s.jobs[i].nextRun)
 }
 
 // NewScheduler creates a new scheduler
@@ -409,7 +410,13 @@ func (s *Scheduler) NextRun() (*Job, time.Time) {
 	if s.size <= 0 {
 		return nil, time.Now()
 	}
+	for i:= 0; i < s.size; i++ {
+		fmt.Println(s.jobs[i].nextRun)
+	}
 	sort.Sort(s)
+	for j:= 0; j < s.size; j++ {
+		fmt.Println(s.jobs[j].nextRun)
+	}
 	return s.jobs[0], s.jobs[0].nextRun
 }
 
